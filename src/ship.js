@@ -1,12 +1,13 @@
 class Ship {
-  isDestroyed = false;
+  #isDestroyed = false;
+  #length;
 
   constructor(length) {
-    this.length = length;
+    this.#length = length;
   }
 
   get isDestroyed() {
-    return this.isDestroyed;
+    return this.#isDestroyed;
   }
 
   //getHit();
