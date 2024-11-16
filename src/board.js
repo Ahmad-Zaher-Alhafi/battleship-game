@@ -1,43 +1,60 @@
 import * as cellModule from "./cell";
+import * as shipModule from "./ship";
 
 class Board {
   #cells = [];
-  #cellsCount;
+  #ships = [];
 
-  constructor(cellsData) {
-    this.#cellsCount = cellsData.length;
-    this.#createCells(cellsData);
+  constructor(cellsCount, shipsData) {
+    this.#createCells(cellsCount);
+    this.#createShips(shipsData);
   }
 
-  #createCells(cellsData) {
-    const rowsNumber = this.#cellsCount / 2;
-    const columnsNumber = this.#cellsCount / 2;
-
-    let counter = 0;
+  #createCells(cellsCount) {
+    const rowsNumber = cellsCount / 2;
+    const columnsNumber = cellsCount / 2;
 
     for (let row = 0; row < rowsNumber; row++) {
       for (let column = 0; column < columnsNumber; column++) {
-        const cell = cellModule.createCell(
-          row,
-          column,
-          cellsData[counter++].containsAShip
-        );
-
+        const cell = cellModule.createCell(row, column, false);
         this.#cells.push(cell);
       }
     }
+  }
+
+  #createShips(shipsData) {
+    shipsData.forEach((shipData) => {
+      const shipsCells = this.#cells.filter(
+        (cell) =>
+          cell.row >= shipData.rowStart &&
+          cell.row <= shipData.rowEnd &&
+          cell.column >= shipData.columnStart &&
+          cell.column <= shipData.columnEnd
+      );
+
+      shipsCells.forEach((cell) => {
+        cell.containsPartOfShip = true;
+      });
+
+      const ship = shipModule.createShip(shipsCells);
+      this.#ships.push(ship);
+    });
   }
 
   get cells() {
     return [...this.#cells];
   }
 
+  get ships() {
+    return [...this.#ships];
+  }
+
   // deliverCellHit(cellRow, cellColumn);
   // haveAllShipsGotDestroyed();
 }
 
-function createBoard(cellsData) {
-  return new Board(cellsData);
+function createBoard(cellsCount, shipsData) {
+  return new Board(cellsCount, shipsData);
 }
 
 export { createBoard };

@@ -2,20 +2,23 @@ class Cell {
   #isShot = false;
   #row;
   #column;
-  #containsAShip;
 
-  constructor(row, column, containsAShip) {
+  constructor(row, column, containsPartOfShip) {
     this.#row = row;
     this.#column = column;
-    this.#containsAShip = containsAShip;
+    this.containsPartOfShip = containsPartOfShip;
   }
 
   get isShot() {
-    return this.isShot;
+    return this.#isShot;
   }
 
-  get containsAShip() {
-    return this.#containsAShip;
+  get row() {
+    return this.#row;
+  }
+
+  get column() {
+    return this.#column;
   }
 
   // takeShot();
