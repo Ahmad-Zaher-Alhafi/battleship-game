@@ -10,11 +10,7 @@ const p1ShipsData = [
 ];
 
 const p1Board = boardModule.createBoard(boardCellsCount, p1ShipsData);
-const p1 = playersControllerModule.generatePlayer(
-  1,
-  "zaherha",
-  p1Board
-);
+const p1 = playersControllerModule.generatePlayer(1, "zaherha", p1Board);
 
 const p2ShipsData = [
   { rowStart: 0, rowEnd: 0, columnStart: 0, columnEnd: 1 },
@@ -22,14 +18,14 @@ const p2ShipsData = [
 ];
 
 const p2Board = boardModule.createBoard(boardCellsCount, p2ShipsData);
-const p2 = playersControllerModule.generatePlayer(
-  2,
-  "jack",
-  p2Board
-);
+const p2 = playersControllerModule.generatePlayer(2, "jack", p2Board);
 
-if (p1.hasLostAllShps()) {
+playersControllerModule.deliverAHitToPlayer(1, 0, 0);
+playersControllerModule.deliverAHitToPlayer(1, 0, 1);
+playersControllerModule.deliverAHitToPlayer(1, 1, 1);
+
+if (p1.hasLostAllShips()) {
   console.log(`${p2.name} is the winner!`);
-} else if (p2.hasLostAllShps()) {
+} else if (p2.hasLostAllShips()) {
   console.log(`${p1.name} is the winner!`);
 }

@@ -17,11 +17,13 @@ class Ship {
     return [...this.#cells];
   }
 
-  isDestroyed() {
+  get isDestroyed() {
     return this.#takenHitsCount >= this.#length;
   }
 
-  //getHit();
+  onGotHit() {
+    ++this.#takenHitsCount;
+  }
 }
 
 function createShip(cells) {

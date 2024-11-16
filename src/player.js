@@ -9,16 +9,21 @@ class Player {
     this.#board = board;
   }
 
-  hasLostAllShps() {
+  get id() {
+    return this.#id;
+  }
+
+  get name() {
+    return this.#name;
+  }
+
+  hasLostAllShips() {
     return this.#board.areAllShipsDestroyed();
   }
 
-  // Shoot(cellRow, cellColumn);
-  // GetHot(cellRow, cellColumn);
-}
-
-function createPlayer(id, name, board) {
-  return new Player(id, name, board);
+  recieveHit(cellRow, cellColumn) {
+    this.#board.recieveHit(cellRow, cellColumn);
+  }
 }
 
 export { Player };

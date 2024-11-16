@@ -19,4 +19,28 @@ const p2ShipsData = [
 const p2Board = boardModule.createBoard(boardCellsCount, p2ShipsData);
 const p2 = playersControllerModule.generatePlayer(2, "jack", p2Board);
 
-export { boardCellsCount, p1ShipsData, p2ShipsData, p1Board, p2Board, p1, p2 };
+function hitCell(cellRow, cellColumn) {
+  playersControllerModule.deliverAHitToPlayer(
+    1,
+    cellRow,
+    cellColumn
+  );
+
+  const cell = p1Board.cells.find(
+    (cell) => cell.row === cellRow && cell.column === cellColumn
+  );
+
+  return cell;
+}
+
+export {
+  playersControllerModule,
+  boardCellsCount,
+  p1ShipsData,
+  p2ShipsData,
+  p1Board,
+  p2Board,
+  p1,
+  p2,
+  hitCell,
+};

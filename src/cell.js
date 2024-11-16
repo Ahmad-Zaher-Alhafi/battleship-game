@@ -21,7 +21,13 @@ class Cell {
     return this.#column;
   }
 
-  // takeShot();
+  onGotHit() {
+    if (this.#isShot) {
+      throw("Cell got shot twice");
+    }
+
+    this.#isShot = true;
+  }
 }
 
 function createCell(row, column, containsAShip) {

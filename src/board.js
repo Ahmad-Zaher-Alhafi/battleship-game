@@ -50,10 +50,23 @@ class Board {
   }
 
   areAllShipsDestroyed() {
-    return this.#ships.every((ship) => ship.areAllShipsDestroyed === true);
+    return this.#ships.every((ship) => ship.isDestroyed === true);
   }
 
-  // deliverCellHit(cellRow, cellColumn);
+  recieveHit(cellRow, cellColumn) {
+    const cell = this.#cells.find(
+      (cell) => cell.row === cellRow && cell.column === cellColumn
+    );
+
+    if (cell.isShot) return;
+
+    cell.onGotHit();
+
+    if (cell.containsPartOfShip) {
+      const ship = this.#ships.find((ship) => ship.cells.includes(cell));
+      ship.onGotHit();
+    }
+  }
 }
 
 function createBoard(cellsCount, shipsData) {
