@@ -1,4 +1,5 @@
 import * as boardModule from "../board";
+import * as playersControllerModule from "../playersController";
 
 const boardCellsCount = 4;
 
@@ -7,6 +8,15 @@ const p1ShipsData = [
   { rowStart: 1, rowEnd: 1, columnStart: 1, columnEnd: 1 },
 ];
 
-const board = boardModule.createBoard(boardCellsCount, p1ShipsData);
+const p1Board = boardModule.createBoard(boardCellsCount, p1ShipsData);
+const p1 = playersControllerModule.generatePlayer(1, "zaherha", p1Board);
 
-export { boardCellsCount, p1ShipsData, board };
+const p2ShipsData = [
+  { rowStart: 0, rowEnd: 0, columnStart: 0, columnEnd: 1 },
+  { rowStart: 1, rowEnd: 1, columnStart: 1, columnEnd: 1 },
+];
+
+const p2Board = boardModule.createBoard(boardCellsCount, p2ShipsData);
+const p2 = playersControllerModule.generatePlayer(2, "jack", p2Board);
+
+export { boardCellsCount, p1ShipsData, p2ShipsData, p1Board, p2Board, p1, p2 };

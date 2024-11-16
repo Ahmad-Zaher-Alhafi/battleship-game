@@ -1,6 +1,5 @@
 import * as playerModule from "./player";
 
-const playersGenerator = (() => {
   const players = [];
 
   function generatePlayer(id, name, board) {
@@ -9,7 +8,4 @@ const playersGenerator = (() => {
     return player;
   }
 
-  return { generatePlayer };
-})();
-
-export { playersGenerator };
+export { generatePlayer };

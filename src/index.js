@@ -10,7 +10,7 @@ const p1ShipsData = [
 ];
 
 const p1Board = boardModule.createBoard(boardCellsCount, p1ShipsData);
-const p1 = playersControllerModule.playersGenerator.generatePlayer(
+const p1 = playersControllerModule.generatePlayer(
   1,
   "zaherha",
   p1Board
@@ -22,7 +22,7 @@ const p2ShipsData = [
 ];
 
 const p2Board = boardModule.createBoard(boardCellsCount, p2ShipsData);
-const p2 = playersControllerModule.playersGenerator.generatePlayer(
+const p2 = playersControllerModule.generatePlayer(
   2,
   "jack",
   p2Board
