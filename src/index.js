@@ -1,5 +1,5 @@
 import "./styles.css";
-import * as playerModule from "./player";
+import * as playersControllerModule from "./playersController";
 import * as boardModule from "./board";
 
 const boardCellsCount = 4;
@@ -10,7 +10,11 @@ const p1ShipsData = [
 ];
 
 const p1Board = boardModule.createBoard(boardCellsCount, p1ShipsData);
-const p1 = playerModule.createPlayer(1, "zaherha", p1Board);
+const p1 = playersControllerModule.playersGenerator.generatePlayer(
+  1,
+  "zaherha",
+  p1Board
+);
 
 const p2ShipsData = [
   { rowStart: 0, rowEnd: 0, columnStart: 0, columnEnd: 1 },
@@ -18,7 +22,11 @@ const p2ShipsData = [
 ];
 
 const p2Board = boardModule.createBoard(boardCellsCount, p2ShipsData);
-const p2 = playerModule.createPlayer(2, "jack", p2Board);
+const p2 = playersControllerModule.playersGenerator.generatePlayer(
+  2,
+  "jack",
+  p2Board
+);
 
 if (p1.hasLostAllShps()) {
   console.log(`${p2.name} is the winner!`);

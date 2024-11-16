@@ -21,4 +21,4 @@ function createPlayer(id, name, board) {
   return new Player(id, name, board);
 }
 
-export { createPlayer };
+export { Player };
