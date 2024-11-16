@@ -9,6 +9,10 @@ class Player {
     this.#board = board;
   }
 
+  hasLostAllShps() {
+    return this.#board.areAllShipsDestroyed();
+  }
+
   // Shoot(cellRow, cellColumn);
   // GetHot(cellRow, cellColumn);
 }

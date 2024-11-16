@@ -2,6 +2,7 @@ class Ship {
   #isDestroyed = false;
   #length;
   #cells = [];
+  #takenHitsCount = 0;
 
   constructor(cells) {
     this.#cells = cells;
@@ -14,6 +15,10 @@ class Ship {
 
   get cells() {
     return [...this.#cells];
+  }
+
+  isDestroyed() {
+    return this.#takenHitsCount >= this.#length;
   }
 
   //getHit();

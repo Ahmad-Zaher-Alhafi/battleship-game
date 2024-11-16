@@ -49,8 +49,11 @@ class Board {
     return [...this.#ships];
   }
 
+  areAllShipsDestroyed() {
+    return this.#ships.every((ship) => ship.areAllShipsDestroyed === true);
+  }
+
   // deliverCellHit(cellRow, cellColumn);
-  // haveAllShipsGotDestroyed();
 }
 
 function createBoard(cellsCount, shipsData) {
