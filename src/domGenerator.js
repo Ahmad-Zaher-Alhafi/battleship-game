@@ -2,7 +2,7 @@ const content = document.querySelector(".content");
 
 const playersIdWithCells = [];
 
-function createPlayerArea(rowsNumber, playerid, playerName) {
+function createPlayerArea(rowsNumber, playerId, playerName) {
   const columnsNumber = rowsNumber;
 
   const playerArea = document.createElement("div");
@@ -31,7 +31,7 @@ function createPlayerArea(rowsNumber, playerid, playerName) {
     }
   }
 
-  playersIdWithCells.push({ playerid, cells });
+  playersIdWithCells.push({ playerId, cells });
 }
 
 function onCellClicked(event) {
@@ -39,7 +39,7 @@ function onCellClicked(event) {
   const playerIdWithCells = playersIdWithCells.find((item) =>
     item.cells.includes(clickedCell)
   );
-  const playerID = playerIdWithCells.playerid;
+  const playerID = playerIdWithCells.playerId;
   const clickedCellIndex = playerIdWithCells.cells.indexOf(clickedCell);
 
   creteShootCustomEvent(playerID, clickedCellIndex);
@@ -56,4 +56,18 @@ function creteShootCustomEvent(targetPlayerID, targetCellIndex) {
   document.dispatchEvent(customEvent);
 }
 
-export { createPlayerArea };
+function setCellBackgroundAfterShot(plaeyrId, cellIndex, cellContainsShipPart) {
+  const playerIdWithCells = playersIdWithCells.find(
+    (player) => player.playerId === plaeyrId
+  );
+
+  const cell = playerIdWithCells.cells[cellIndex];
+
+  if (cellContainsShipPart) {
+    cell.textContent = "X";
+  } else {
+    cell.textContent = "O";
+  }
+}
+
+export { createPlayerArea, setCellBackgroundAfterShot };

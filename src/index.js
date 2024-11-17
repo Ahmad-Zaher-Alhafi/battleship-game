@@ -1,36 +1,60 @@
 import "./styles.css";
 import * as playersControllerModule from "./playersController";
 import * as boardModule from "./board";
-import * as domGeneratorMosdule from "./domGenerator";
+import * as domGeneratorModule from "./domGenerator";
 
 const boardRowsNumber = 6;
+const cellsWithShipsPartCount = 20;
+const computerPlayersNumber = 10;
+const players = [];
 
-const p1ShipsData = [
-  { rowStart: 0, rowEnd: 0, columnStart: 0, columnEnd: 1 },
-  { rowStart: 1, rowEnd: 1, columnStart: 1, columnEnd: 1 },
-];
+function getRandomInteger(maxNumber) {
+  return Math.floor(Math.random() * maxNumber);
+}
 
-const p1Board = boardModule.createBoard(boardRowsNumber, p1ShipsData);
-const p1 = playersControllerModule.generatePlayer(1, "zaherha", p1Board);
+for (let index = 0; index < computerPlayersNumber; index++) {
+  const shipsData = [];
 
-const p2ShipsData = [
-  { rowStart: 0, rowEnd: 0, columnStart: 0, columnEnd: 1 },
-  { rowStart: 1, rowEnd: 1, columnStart: 1, columnEnd: 1 },
-];
+  let createdCellsWithShipsPartCount = 0;
+  while (createdCellsWithShipsPartCount < cellsWithShipsPartCount) {
+    const randomStart = getRandomInteger(boardRowsNumber);
+    const randomEnd = getRandomInteger(boardRowsNumber);
 
-const p2Board = boardModule.createBoard(boardRowsNumber, p2ShipsData);
-const p2 = playersControllerModule.generatePlayer(2, "jack", p2Board);
+    const ship = {
+      rowStart: randomStart,
+      rowEnd: randomStart,
+      columnStart: randomEnd,
+      columnEnd: randomEnd,
+    };
 
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p1.id, p1.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p2.id, p2.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p1.id, p1.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p2.id, p2.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p1.id, p1.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p2.id, p2.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p1.id, p1.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p2.id, p2.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p1.id, p1.name);
-domGeneratorMosdule.createPlayerArea(boardRowsNumber, p2.id, p2.name);
+    if (
+      shipsData.some(
+        (data) =>
+          data.rowStart === ship.rowStart &&
+          data.rowEnd === ship.rowEnd &&
+          data.columnStart === ship.columnStart &&
+          data.columnEnd === ship.columnEnd
+      )
+    ) {
+      continue;
+    }
+
+    shipsData.push(ship);
+    ++createdCellsWithShipsPartCount;
+  }
+
+  const board = boardModule.createBoard(boardRowsNumber, shipsData);
+
+  const player = playersControllerModule.generatePlayer(
+    index,
+    `PC:${index}`,
+    board
+  );
+
+  players.push(player);
+
+  domGeneratorModule.createPlayerArea(boardRowsNumber, player.id, player.name);
+}
 
 document.addEventListener("onPlayerAttacked", onPlayerAttacked);
 
@@ -40,9 +64,22 @@ function onPlayerAttacked(event) {
 
   playersControllerModule.deliverAHitToPlayer(targetPlayerID, targetCellIndex);
 
-  if (p1.hasLostAllShips()) {
-    console.log(`${p2.name} is the winner!`);
-  } else if (p2.hasLostAllShips()) {
-    console.log(`${p1.name} is the winner!`);
-  }
+  const cellContainsPartOfShip =
+    players[targetPlayerID].board.cells[targetCellIndex].containsPartOfShip;
+
+  domGeneratorModule.setCellBackgroundAfterShot(
+    targetPlayerID,
+    targetCellIndex,
+    cellContainsPartOfShip
+  );
+
+  players.forEach((player) => {
+    if (player.hasLostAllShips()) {
+      console.log(`${player.name} is out of game!`);
+    }
+  });
+
+  console.log(players[targetPlayerID]);
 }
+
+console.log(players);

@@ -17,6 +17,10 @@ class Player {
     return this.#name;
   }
 
+  get board() {
+    return this.#board;
+  }
+
   hasLostAllShips() {
     return this.#board.areAllShipsDestroyed();
   }
