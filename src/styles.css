@@ -1,5 +1,6 @@
 body {
-  background-color: gray;
+  background-color: rgb(41, 41, 41);
+  color: white;
 }
 
 .content {
@@ -34,4 +35,15 @@ body {
 
   border-style: solid;
   border-width: 2px;
+
+  font-size: xx-large;
+  background-color: rgb(83, 83, 83);
+}
+
+.cell:hover{
+    background-color: aqua;
+}
+
+.playerName{
+    font-weight: bold;
 }

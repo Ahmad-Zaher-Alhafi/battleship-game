@@ -24,7 +24,6 @@ function createPlayerArea(rowsNumber, playerId, playerName) {
     for (let column = 0; column < columnsNumber; column++) {
       const cell = document.createElement("div");
       cell.className = "cell";
-      cell.textContent = "cell";
       playerBoard.appendChild(cell);
       cells.push(cell);
       cell.addEventListener("click", onCellClicked);
