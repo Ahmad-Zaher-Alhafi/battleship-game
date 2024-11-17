@@ -82,4 +82,60 @@ function onPlayerAttacked(event) {
   console.log(players[targetPlayerID]);
 }
 
-console.log(players);
+function shootRandomPlayer(attackingPlayer) {
+  const otherPlayers = getPlayersThatHasNotLost().filter(
+    (p) => p !== attackingPlayer
+  );
+  const randomPlayerIndex = getRandomInteger(otherPlayers.length);
+  const targetPlayer = otherPlayers[randomPlayerIndex];
+
+  const notShotCells = targetPlayer.board.getNotShotCells();
+  const randomCellIndex = getRandomInteger(notShotCells.length);
+  const cellIndex = targetPlayer.board.cells.indexOf(
+    notShotCells[randomCellIndex]
+  );
+
+  playersControllerModule.deliverAHitToPlayer(targetPlayer.id, cellIndex);
+
+  const cellContainsPartOfShip =
+    targetPlayer.board.cells[cellIndex].containsPartOfShip;
+
+  domGeneratorModule.setCellBackgroundAfterShot(
+    targetPlayer.id,
+    cellIndex,
+    cellContainsPartOfShip
+  );
+
+  domGeneratorModule.logAttack(attackingPlayer.name, targetPlayer.name);
+
+  if (targetPlayer.hasLostAllShips()) {
+    domGeneratorModule.markPlayerAsLost(targetPlayer.id);
+  }
+}
+
+function getPlayersThatHasNotLost() {
+  return players.filter((player) => !player.hasLostAllShips());
+}
+
+let pcIndexTurn = 0;
+
+async function startMatch() {
+  while (getPlayersThatHasNotLost().length > 1) {
+    playRound();
+    await delay(10);
+  }
+
+  const winner = getPlayersThatHasNotLost()[0];
+  domGeneratorModule.markPlayerAsWinner(winner.id);
+}
+
+function playRound() {
+  shootRandomPlayer(getPlayersThatHasNotLost()[pcIndexTurn]);
+  pcIndexTurn = (pcIndexTurn + 1) % getPlayersThatHasNotLost().length;
+}
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+startMatch();

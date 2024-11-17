@@ -1,13 +1,14 @@
-const content = document.querySelector(".content");
+const playerAreas = document.querySelector(".playerAreas");
+const logsContent = document.querySelector(".logsContent");
 
-const playersIdWithCells = [];
+const playersDOM = [];
 
 function createPlayerArea(rowsNumber, playerId, playerName) {
   const columnsNumber = rowsNumber;
 
   const playerArea = document.createElement("div");
   playerArea.className = "playerArea";
-  content.appendChild(playerArea);
+  playerAreas.appendChild(playerArea);
 
   const playerNameElement = document.createElement("div");
   playerNameElement.className = "playerName";
@@ -30,12 +31,12 @@ function createPlayerArea(rowsNumber, playerId, playerName) {
     }
   }
 
-  playersIdWithCells.push({ playerId, cells });
+  playersDOM.push({ playerId, cells, playerNameElement });
 }
 
 function onCellClicked(event) {
   const clickedCell = event.target;
-  const playerIdWithCells = playersIdWithCells.find((item) =>
+  const playerIdWithCells = playersDOM.find((item) =>
     item.cells.includes(clickedCell)
   );
   const playerID = playerIdWithCells.playerId;
@@ -56,7 +57,7 @@ function creteShootCustomEvent(targetPlayerID, targetCellIndex) {
 }
 
 function setCellBackgroundAfterShot(plaeyrId, cellIndex, cellContainsShipPart) {
-  const playerIdWithCells = playersIdWithCells.find(
+  const playerIdWithCells = playersDOM.find(
     (player) => player.playerId === plaeyrId
   );
 
@@ -69,4 +70,28 @@ function setCellBackgroundAfterShot(plaeyrId, cellIndex, cellContainsShipPart) {
   }
 }
 
-export { createPlayerArea, setCellBackgroundAfterShot };
+function markPlayerAsLost(playerId) {
+  const playerDom = playersDOM.find((player) => player.playerId === playerId);
+  playerDom.playerNameElement.textContent += " (Lost)";
+  playerDom.playerNameElement.style.color = "red";
+}
+
+function markPlayerAsWinner(playerId) {
+  const playerDom = playersDOM.find((player) => player.playerId === playerId);
+  playerDom.playerNameElement.textContent += " (Winner)";
+  playerDom.playerNameElement.style.color = "Green";
+}
+
+function logAttack(attackingPlayerName, targetPlayerName) {
+  const log = document.createElement("div");
+  log.textContent = `${attackingPlayerName} has attacked ${targetPlayerName}`;
+  logsContent.insertBefore(log, logsContent.firstChild);
+}
+
+export {
+  createPlayerArea,
+  setCellBackgroundAfterShot,
+  markPlayerAsLost,
+  markPlayerAsWinner,
+  logAttack,
+};

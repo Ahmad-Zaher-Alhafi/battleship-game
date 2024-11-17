@@ -4,6 +4,12 @@ body {
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.playerAreas {
   display: grid;
   grid-template: repeat(auto-fit, minmax(200px, 400px)) / repeat(
       auto-fit,
@@ -40,10 +46,28 @@ body {
   background-color: rgb(83, 83, 83);
 }
 
-.cell:hover{
-    background-color: aqua;
+.cell:hover {
+  background-color: aqua;
 }
 
-.playerName{
-    font-weight: bold;
+.playerName {
+  font-weight: bold;
+}
+
+.logs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logsHeader{
+  font-size: xx-large;
+}
+
+.logsContent {
+  overflow: scroll;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden;
+  max-height: 300px;
+  max-width: 200px;
 }

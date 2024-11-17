@@ -64,6 +64,10 @@ class Board {
       ship.onGotHit();
     }
   }
+
+  getNotShotCells() {
+    return this.#cells.filter((cell) => !cell.isShot);
+  }
 }
 
 function createBoard(rowsNumber, shipsData) {
