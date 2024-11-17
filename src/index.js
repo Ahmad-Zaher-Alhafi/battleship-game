@@ -4,11 +4,14 @@ import * as boardModule from "./board";
 import * as domGeneratorModule from "./domGenerator";
 
 const boardRowsNumber = 6;
-const cellsWithShipsPartCount = 20;
-const computerPlayersNumber = 9;
+const cellsWithShipsPartCount = 10;
+const computerPlayersNumber = 3;
 const totalPlayersNumber = computerPlayersNumber + 1; // +1 is the human player
 const players = [];
 const humanPlayerIndex = 0;
+let humanPlayer;
+
+let gameSpeed = 10; // game speed measored by ms
 
 function getRandomInteger(maxNumber) {
   return Math.floor(Math.random() * maxNumber);
@@ -49,7 +52,7 @@ for (let index = 0; index < totalPlayersNumber; index++) {
 
   const player = playersControllerModule.generatePlayer(
     index,
-    `PC:${index}`,
+    index === humanPlayerIndex ? "You" : `PC:${index}`,
     board
   );
 
@@ -64,30 +67,26 @@ for (let index = 0; index < totalPlayersNumber; index++) {
   );
 }
 
+humanPlayer = players[humanPlayerIndex];
+
 document.addEventListener("onPlayerAttacked", onPlayerAttacked);
 
 function onPlayerAttacked(event) {
+  if (currentTurnPlayer != humanPlayer) return;
+
   const targetPlayerID = event.detail.targetPlayerID;
+  const targetPlayer = players[targetPlayerID];
+  if (targetPlayer === humanPlayer) return;
+
   const targetCellIndex = event.detail.targetCellIndex;
+  if (targetPlayer.board.cells[targetCellIndex].isShot) return;
 
-  playersControllerModule.deliverAHitToPlayer(targetPlayerID, targetCellIndex);
+  shootPlayer(humanPlayer, targetPlayer, targetCellIndex);
 
-  const cellContainsPartOfShip =
-    players[targetPlayerID].board.cells[targetCellIndex].containsPartOfShip;
-
-  domGeneratorModule.setCellBackgroundAfterShot(
-    targetPlayerID,
-    targetCellIndex,
-    cellContainsPartOfShip
-  );
-
-  players.forEach((player) => {
-    if (player.hasLostAllShips()) {
-      console.log(`${player.name} is out of game!`);
-    }
-  });
-
-  console.log(players[targetPlayerID]);
+  if (!checkEndOfGame()) {
+    moveTurnToNextPlayer();
+    playPCRound();
+  }
 }
 
 function shootRandomPlayer(attackingPlayer) {
@@ -103,47 +102,65 @@ function shootRandomPlayer(attackingPlayer) {
     notShotCells[randomCellIndex]
   );
 
-  playersControllerModule.deliverAHitToPlayer(targetPlayer.id, cellIndex);
+  shootPlayer(attackingPlayer, targetPlayer, cellIndex);
+}
+
+function shootPlayer(attackingPlayer, targetPlayer, targetCellIndex) {
+  playersControllerModule.deliverAHitToPlayer(targetPlayer.id, targetCellIndex);
 
   const cellContainsPartOfShip =
-    targetPlayer.board.cells[cellIndex].containsPartOfShip;
+    targetPlayer.board.cells[targetCellIndex].containsPartOfShip;
 
   domGeneratorModule.setCellBackgroundAfterShot(
     targetPlayer.id,
-    cellIndex,
+    targetCellIndex,
     cellContainsPartOfShip
   );
 
   domGeneratorModule.logAttack(attackingPlayer.name, targetPlayer.name);
 
   if (targetPlayer.hasLostAllShips()) {
-    domGeneratorModule.markPlayerAsLost(targetPlayer.id);
+    domGeneratorModule.markPlayerAsLost(
+      targetPlayer.id,
+      targetPlayer.board.cells
+    );
   }
+}
+
+let currentTurnPlayer = humanPlayer;
+let currentPlayerTurnIndex = 0;
+function moveTurnToNextPlayer() {
+  currentPlayerTurnIndex = (currentPlayerTurnIndex + 1) % players.length;
+  if (players[currentPlayerTurnIndex].hasLostAllShips()) {
+    moveTurnToNextPlayer();
+    return;
+  }
+
+  currentTurnPlayer = players[currentPlayerTurnIndex];
 }
 
 function getPlayersThatHasNotLost() {
   return players.filter((player) => !player.hasLostAllShips());
 }
 
-let pcIndexTurn = 0;
-
-async function startMatch() {
-  while (getPlayersThatHasNotLost().length > 1) {
-    playRound();
-    await delay(10);
+async function playPCRound() {
+  while (currentTurnPlayer != humanPlayer && !checkEndOfGame()) {
+    shootRandomPlayer(currentTurnPlayer);
+    await delay(gameSpeed);
+    moveTurnToNextPlayer();
   }
-
-  const winner = getPlayersThatHasNotLost()[0];
-  domGeneratorModule.markPlayerAsWinner(winner.id);
-}
-
-function playRound() {
-  shootRandomPlayer(getPlayersThatHasNotLost()[pcIndexTurn]);
-  pcIndexTurn = (pcIndexTurn + 1) % getPlayersThatHasNotLost().length;
 }
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-startMatch();
+function checkEndOfGame() {
+  if (getPlayersThatHasNotLost().length === 1) {
+    const winner = getPlayersThatHasNotLost()[0];
+    domGeneratorModule.markPlayerAsWinner(winner.id);
+    return true;
+  }
+
+  return false;
+}

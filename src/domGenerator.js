@@ -84,10 +84,18 @@ function setCellBackgroundAfterShot(plaeyrId, cellIndex, cellContainsShipPart) {
   }
 }
 
-function markPlayerAsLost(playerId) {
+function markPlayerAsLost(playerId, boardCells) {
   const playerDom = playersDOM.find((player) => player.playerId === playerId);
   playerDom.playerNameElement.textContent += " (Lost)";
   playerDom.playerNameElement.style.color = "red";
+
+  for (let index = 0; index < boardCells.length; index++) {
+    setCellBackgroundAfterShot(
+      playerId,
+      index,
+      boardCells[index].containsPartOfShip
+    );
+  }
 }
 
 function markPlayerAsWinner(playerId) {
