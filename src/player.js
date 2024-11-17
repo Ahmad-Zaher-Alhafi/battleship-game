@@ -21,8 +21,8 @@ class Player {
     return this.#board.areAllShipsDestroyed();
   }
 
-  recieveHit(cellRow, cellColumn) {
-    this.#board.recieveHit(cellRow, cellColumn);
+  recieveHit(cellIndex) {
+    this.#board.recieveHit(cellIndex);
   }
 }
 

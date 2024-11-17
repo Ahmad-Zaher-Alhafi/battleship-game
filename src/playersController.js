@@ -8,9 +8,9 @@ function generatePlayer(id, name, board) {
   return player;
 }
 
-function deliverAHitToPlayer(id, cellRow, cellColumn) {
+function deliverAHitToPlayer(id, cellIndex) {
   const player = players.find((p) => p.id === id);
-  player.recieveHit(cellRow, cellColumn);
+  player.recieveHit(cellIndex);
 }
 
 export { generatePlayer, deliverAHitToPlayer };

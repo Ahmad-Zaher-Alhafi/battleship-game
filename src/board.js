@@ -5,14 +5,13 @@ class Board {
   #cells = [];
   #ships = [];
 
-  constructor(cellsCount, shipsData) {
-    this.#createCells(cellsCount);
+  constructor(rowsNumber, shipsData) {
+    this.#createCells(rowsNumber);
     this.#createShips(shipsData);
   }
 
-  #createCells(cellsCount) {
-    const rowsNumber = cellsCount / 2;
-    const columnsNumber = cellsCount / 2;
+  #createCells(rowsNumber) {
+    const columnsNumber = rowsNumber;
 
     for (let row = 0; row < rowsNumber; row++) {
       for (let column = 0; column < columnsNumber; column++) {
@@ -53,10 +52,8 @@ class Board {
     return this.#ships.every((ship) => ship.isDestroyed === true);
   }
 
-  recieveHit(cellRow, cellColumn) {
-    const cell = this.#cells.find(
-      (cell) => cell.row === cellRow && cell.column === cellColumn
-    );
+  recieveHit(cellIndex) {
+    const cell = this.#cells[cellIndex];
 
     if (cell.isShot) return;
 
@@ -69,8 +66,8 @@ class Board {
   }
 }
 
-function createBoard(cellsCount, shipsData) {
-  return new Board(cellsCount, shipsData);
+function createBoard(rowsNumber, shipsData) {
+  return new Board(rowsNumber, shipsData);
 }
 
 export { createBoard };
