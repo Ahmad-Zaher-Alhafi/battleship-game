@@ -200,14 +200,14 @@ function startGame(event) {
   generatePlayers(pcsCount);
 }
 
-function getPlayerName(playerId) {
-  return players[playerId].name;
+function getPlayer(playerId) {
+  return players[playerId];
 }
 
 export {
   humanPlayerIndex,
   hasGameFinished,
   hasPlayerLost,
-  getPlayerName,
+  getPlayer,
   currentPlayerTurnIndex,
 };

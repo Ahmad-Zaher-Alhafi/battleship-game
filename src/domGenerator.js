@@ -181,11 +181,12 @@ function onStartGameButtonClicked() {
 
 function setPlayerTurnText(playerId, playerName) {
   playersDOM.forEach((playerDom) => {
+    const player = indexModule.getPlayer(playerDom.playerId);
+    if (player.hasLostAllShips()) return;
+
     // Reset all names color
     playerDom.playerNameElement.style.color = "white";
-    playerDom.playerNameElement.textContent = indexModule.getPlayerName(
-      playerDom.playerId
-    );
+    playerDom.playerNameElement.textContent = player.name;
   });
 
   // Mark the current player turn name as yellow color and text
