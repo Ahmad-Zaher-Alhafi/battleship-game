@@ -22,4 +22,13 @@ function onPlayerLost(id) {
   });
 }
 
-export { generatePlayer, deliverAHitToPlayer, onPlayerLost };
+function onNewGameStarted() {
+  players.length = 0;
+}
+
+export {
+  generatePlayer,
+  deliverAHitToPlayer,
+  onPlayerLost,
+  onNewGameStarted,
+};

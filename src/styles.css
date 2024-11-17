@@ -64,6 +64,6 @@ body {
   overflow: scroll;
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden;
-  max-height: 300px;
+  max-height: 180px;
   max-width: 200px;
 }

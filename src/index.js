@@ -4,9 +4,7 @@ import * as boardModule from "./board";
 import * as domGeneratorModule from "./domGenerator";
 
 const boardRowsNumber = 6;
-const cellsWithShipsPartCount = 10;
-const computerPlayersNumber = 3;
-const totalPlayersNumber = computerPlayersNumber + 1; // +1 is the human player
+const cellsWithShipsPartCount = 15;
 const players = [];
 const humanPlayerIndex = 0;
 let humanPlayer;
@@ -17,57 +15,69 @@ function getRandomInteger(maxNumber) {
   return Math.floor(Math.random() * maxNumber);
 }
 
-for (let index = 0; index < totalPlayersNumber; index++) {
-  const shipsData = [];
+let currentTurnPlayer;
+let currentPlayerTurnIndex = 0;
 
-  let createdCellsWithShipsPartCount = 0;
-  while (createdCellsWithShipsPartCount < cellsWithShipsPartCount) {
-    const randomStart = getRandomInteger(boardRowsNumber);
-    const randomEnd = getRandomInteger(boardRowsNumber);
+function generatePlayers(pcsCount) {
+  players.length = 0;
 
-    const ship = {
-      rowStart: randomStart,
-      rowEnd: randomStart,
-      columnStart: randomEnd,
-      columnEnd: randomEnd,
-    };
+  const totalPlayersNumber = pcsCount + 1; // +1 is the human player
 
-    if (
-      shipsData.some(
-        (data) =>
-          data.rowStart === ship.rowStart &&
-          data.rowEnd === ship.rowEnd &&
-          data.columnStart === ship.columnStart &&
-          data.columnEnd === ship.columnEnd
-      )
-    ) {
-      continue;
+  for (let index = 0; index < totalPlayersNumber; index++) {
+    const shipsData = [];
+
+    let createdCellsWithShipsPartCount = 0;
+    while (createdCellsWithShipsPartCount < cellsWithShipsPartCount) {
+      const randomStart = getRandomInteger(boardRowsNumber);
+      const randomEnd = getRandomInteger(boardRowsNumber);
+
+      const ship = {
+        rowStart: randomStart,
+        rowEnd: randomStart,
+        columnStart: randomEnd,
+        columnEnd: randomEnd,
+      };
+
+      if (
+        shipsData.some(
+          (data) =>
+            data.rowStart === ship.rowStart &&
+            data.rowEnd === ship.rowEnd &&
+            data.columnStart === ship.columnStart &&
+            data.columnEnd === ship.columnEnd
+        )
+      ) {
+        continue;
+      }
+
+      shipsData.push(ship);
+      ++createdCellsWithShipsPartCount;
     }
 
-    shipsData.push(ship);
-    ++createdCellsWithShipsPartCount;
+    const board = boardModule.createBoard(boardRowsNumber, shipsData);
+
+    const player = playersControllerModule.generatePlayer(
+      index,
+      index === humanPlayerIndex ? "You" : `PC:${index}`,
+      board
+    );
+
+    players.push(player);
+
+    domGeneratorModule.createPlayerArea(
+      boardRowsNumber,
+      player.id,
+      player.name,
+      index === humanPlayerIndex,
+      player.board.cells
+    );
   }
 
-  const board = boardModule.createBoard(boardRowsNumber, shipsData);
+  humanPlayer = players[humanPlayerIndex];
 
-  const player = playersControllerModule.generatePlayer(
-    index,
-    index === humanPlayerIndex ? "You" : `PC:${index}`,
-    board
-  );
-
-  players.push(player);
-
-  domGeneratorModule.createPlayerArea(
-    boardRowsNumber,
-    player.id,
-    player.name,
-    index === humanPlayerIndex,
-    player.board.cells
-  );
+  currentTurnPlayer = humanPlayer;
+  currentPlayerTurnIndex = 0;
 }
-
-humanPlayer = players[humanPlayerIndex];
 
 document.addEventListener("onPlayerAttacked", onPlayerAttacked);
 
@@ -129,8 +139,6 @@ function shootPlayer(attackingPlayer, targetPlayer, targetCellIndex) {
   }
 }
 
-let currentTurnPlayer = humanPlayer;
-let currentPlayerTurnIndex = 0;
 function moveTurnToNextPlayer() {
   currentPlayerTurnIndex = (currentPlayerTurnIndex + 1) % players.length;
   if (players[currentPlayerTurnIndex].hasLostAllShips()) {
@@ -173,6 +181,14 @@ let hasGameFinished = false;
 
 function hasPlayerLost(playerId) {
   return players[playerId].hasLostAllShips();
+}
+
+document.addEventListener("onGameStarted", startGame);
+function startGame(event) {
+  hasGameFinished = false;
+  playersControllerModule.onNewGameStarted();
+  const pcsCount = parseInt(event.detail.pcsCount);
+  generatePlayers(pcsCount);
 }
 
 export { humanPlayerIndex, hasGameFinished, hasPlayerLost };

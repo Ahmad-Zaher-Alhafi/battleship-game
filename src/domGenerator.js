@@ -147,6 +147,32 @@ function logAttack(attackingPlayerName, targetPlayerName) {
   logsContent.insertBefore(log, logsContent.firstChild);
 }
 
+const numOfPCsInput = document.querySelector(".numOfPCsInput");
+numOfPCsInput.addEventListener("change", onPcsInputChanged);
+function onPcsInputChanged() {
+  if (numOfPCsInput.value == undefined || numOfPCsInput.value == 0) {
+    numOfPCsInput.value = 2;
+  }
+
+  if (numOfPCsInput.value > 9) {
+    numOfPCsInput.value = 9;
+  }
+}
+
+const startGameButton = document.querySelector(".startGameButton");
+startGameButton.addEventListener("click", onStartGameButtonClicked);
+function onStartGameButtonClicked() {
+  playersDOM.length = 0;
+  playerAreas.replaceChildren();
+  logsContent.replaceChildren();
+
+  const customEvent = new CustomEvent("onGameStarted", {
+    detail: { pcsCount: numOfPCsInput.value },
+  });
+
+  document.dispatchEvent(customEvent);
+}
+
 export {
   createPlayerArea,
   setCellBackgroundAfterShot,
