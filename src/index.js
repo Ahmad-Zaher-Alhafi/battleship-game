@@ -1,8 +1,9 @@
 import "./styles.css";
 import * as playersControllerModule from "./playersController";
 import * as boardModule from "./board";
+import * as domGeneratorMosdule from "./domGenerator";
 
-const boardCellsCount = 4;
+const boardCellsCount = 12;
 
 const p1ShipsData = [
   { rowStart: 0, rowEnd: 0, columnStart: 0, columnEnd: 1 },
@@ -19,6 +20,18 @@ const p2ShipsData = [
 
 const p2Board = boardModule.createBoard(boardCellsCount, p2ShipsData);
 const p2 = playersControllerModule.generatePlayer(2, "jack", p2Board);
+
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p1.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p2.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p1.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p2.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p1.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p2.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p1.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p2.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p1.name);
+domGeneratorMosdule.createPlayerArea(boardCellsCount, p2.name);
+
 
 playersControllerModule.deliverAHitToPlayer(1, 0, 0);
 playersControllerModule.deliverAHitToPlayer(1, 0, 1);

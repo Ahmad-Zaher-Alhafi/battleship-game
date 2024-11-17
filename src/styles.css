@@ -1,3 +1,37 @@
-body{
-    background-color: gray;
+body {
+  background-color: gray;
+}
+
+.content {
+  display: grid;
+  grid-template: repeat(auto-fit, minmax(200px, 400px)) / repeat(
+      auto-fit,
+      minmax(200px, 400px)
+    );
+
+  gap: 50px;
+
+  justify-content: center;
+}
+
+.playerArea {
+  aspect-ratio: 1 / 1; /* Ensures the height matches the width */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.playerBoard {
+  display: grid;
+  grid-template: repeat(6, 1fr) / repeat(6, 1fr);
+  flex: 1;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-style: solid;
+  border-width: 2px;
 }
