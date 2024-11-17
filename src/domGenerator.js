@@ -55,8 +55,12 @@ function createPlayerArea(
 }
 
 function onCellClicked(event) {
+  if (indexModule.hasGameFinished) return;
+
   const clickedCell = event.target;
   const playerDOM = playersDOM.find((item) => item.cells.includes(clickedCell));
+  if (indexModule.hasPlayerLost(playerDOM.playerId)) return;
+
   const playerID = playerDOM.playerId;
   const clickedCellIndex = playerDOM.cells.indexOf(clickedCell);
 
@@ -64,8 +68,12 @@ function onCellClicked(event) {
 }
 
 function onCellEnter(event) {
+  if (indexModule.hasGameFinished) return;
+
   const enteredCell = event.target;
   const playerDOM = playersDOM.find((item) => item.cells.includes(enteredCell));
+  if (indexModule.hasPlayerLost(playerDOM.playerId)) return;
+
   const cell = playerDOM.boardCells[playerDOM.cells.indexOf(enteredCell)];
 
   if (!cell.isShot) {
@@ -74,8 +82,12 @@ function onCellEnter(event) {
 }
 
 function onCellLeave(event) {
+  if (indexModule.hasGameFinished) return;
+
   const enteredCell = event.target;
   const playerDOM = playersDOM.find((item) => item.cells.includes(enteredCell));
+  if (indexModule.hasPlayerLost(playerDOM.playerId)) return;
+
   const cell = playerDOM.boardCells[playerDOM.cells.indexOf(enteredCell)];
 
   if (!cell.isShot) {

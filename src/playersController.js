@@ -13,4 +13,13 @@ function deliverAHitToPlayer(id, cellIndex) {
   player.recieveHit(cellIndex);
 }
 
-export { generatePlayer, deliverAHitToPlayer };
+function onPlayerLost(id) {
+  // Mark the left of the cells as shot
+  const player = players.find((p) => p.id === id);
+
+  player.board.cells.forEach((cell) => {
+    player.recieveHit(player.board.cells.indexOf(cell));
+  });
+}
+
+export { generatePlayer, deliverAHitToPlayer, onPlayerLost };

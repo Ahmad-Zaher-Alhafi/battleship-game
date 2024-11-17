@@ -120,6 +120,8 @@ function shootPlayer(attackingPlayer, targetPlayer, targetCellIndex) {
   domGeneratorModule.logAttack(attackingPlayer.name, targetPlayer.name);
 
   if (targetPlayer.hasLostAllShips()) {
+    playersControllerModule.onPlayerLost(targetPlayer.id);
+
     domGeneratorModule.markPlayerAsLost(
       targetPlayer.id,
       targetPlayer.board.cells
@@ -159,10 +161,18 @@ function checkEndOfGame() {
   if (getPlayersThatHasNotLost().length === 1) {
     const winner = getPlayersThatHasNotLost()[0];
     domGeneratorModule.markPlayerAsWinner(winner.id);
+    hasGameFinished = true;
     return true;
   }
 
+  hasGameFinished = false;
   return false;
 }
 
-export { humanPlayerIndex };
+let hasGameFinished = false;
+
+function hasPlayerLost(playerId) {
+  return players[playerId].hasLostAllShips();
+}
+
+export { humanPlayerIndex, hasGameFinished, hasPlayerLost };
