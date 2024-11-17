@@ -5,14 +5,16 @@ import * as domGeneratorModule from "./domGenerator";
 
 const boardRowsNumber = 6;
 const cellsWithShipsPartCount = 20;
-const computerPlayersNumber = 10;
+const computerPlayersNumber = 9;
+const totalPlayersNumber = computerPlayersNumber + 1; // +1 is the human player
 const players = [];
+const humanPlayerIndex = 0;
 
 function getRandomInteger(maxNumber) {
   return Math.floor(Math.random() * maxNumber);
 }
 
-for (let index = 0; index < computerPlayersNumber; index++) {
+for (let index = 0; index < totalPlayersNumber; index++) {
   const shipsData = [];
 
   let createdCellsWithShipsPartCount = 0;
@@ -53,7 +55,13 @@ for (let index = 0; index < computerPlayersNumber; index++) {
 
   players.push(player);
 
-  domGeneratorModule.createPlayerArea(boardRowsNumber, player.id, player.name);
+  domGeneratorModule.createPlayerArea(
+    boardRowsNumber,
+    player.id,
+    player.name,
+    index === humanPlayerIndex,
+    player.board.cells
+  );
 }
 
 document.addEventListener("onPlayerAttacked", onPlayerAttacked);

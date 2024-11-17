@@ -3,7 +3,13 @@ const logsContent = document.querySelector(".logsContent");
 
 const playersDOM = [];
 
-function createPlayerArea(rowsNumber, playerId, playerName) {
+function createPlayerArea(
+  rowsNumber,
+  playerId,
+  playerName,
+  isHumanPlayer,
+  boardCells
+) {
   const columnsNumber = rowsNumber;
 
   const playerArea = document.createElement("div");
@@ -28,6 +34,14 @@ function createPlayerArea(rowsNumber, playerId, playerName) {
       playerBoard.appendChild(cell);
       cells.push(cell);
       cell.addEventListener("click", onCellClicked);
+    }
+  }
+
+  if (isHumanPlayer) {
+    for (let index = 0; index < boardCells.length; index++) {
+      if (boardCells[index].containsPartOfShip) {
+        cells[index].textContent = "X";
+      }
     }
   }
 
@@ -64,9 +78,9 @@ function setCellBackgroundAfterShot(plaeyrId, cellIndex, cellContainsShipPart) {
   const cell = playerIdWithCells.cells[cellIndex];
 
   if (cellContainsShipPart) {
-    cell.textContent = "X";
+    cell.style.backgroundColor = "red";
   } else {
-    cell.textContent = "O";
+    cell.style.opacity = 0.1;
   }
 }
 
