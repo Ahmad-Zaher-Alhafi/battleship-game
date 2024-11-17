@@ -56,6 +56,8 @@ function createPlayerArea(
 
 function onCellClicked(event) {
   if (indexModule.hasGameFinished) return;
+  if (indexModule.currentPlayerTurnIndex !== indexModule.humanPlayerIndex)
+    return;
 
   const clickedCell = event.target;
   const playerDOM = playersDOM.find((item) => item.cells.includes(clickedCell));
@@ -69,6 +71,8 @@ function onCellClicked(event) {
 
 function onCellEnter(event) {
   if (indexModule.hasGameFinished) return;
+  if (indexModule.currentPlayerTurnIndex !== indexModule.humanPlayerIndex)
+    return;
 
   const enteredCell = event.target;
   const playerDOM = playersDOM.find((item) => item.cells.includes(enteredCell));
@@ -83,6 +87,8 @@ function onCellEnter(event) {
 
 function onCellLeave(event) {
   if (indexModule.hasGameFinished) return;
+  if (indexModule.currentPlayerTurnIndex !== indexModule.humanPlayerIndex)
+    return;
 
   const enteredCell = event.target;
   const playerDOM = playersDOM.find((item) => item.cells.includes(enteredCell));

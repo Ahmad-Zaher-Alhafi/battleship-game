@@ -204,4 +204,10 @@ function getPlayerName(playerId) {
   return players[playerId].name;
 }
 
-export { humanPlayerIndex, hasGameFinished, hasPlayerLost, getPlayerName };
+export {
+  humanPlayerIndex,
+  hasGameFinished,
+  hasPlayerLost,
+  getPlayerName,
+  currentPlayerTurnIndex,
+};
