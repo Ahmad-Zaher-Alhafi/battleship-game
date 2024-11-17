@@ -173,10 +173,31 @@ function onStartGameButtonClicked() {
   document.dispatchEvent(customEvent);
 }
 
+function setPlayerTurnText(playerId, playerName) {
+  playersDOM.forEach((playerDom) => {
+    // Reset all names color
+    playerDom.playerNameElement.style.color = "white";
+    playerDom.playerNameElement.textContent = indexModule.getPlayerName(
+      playerDom.playerId
+    );
+  });
+
+  // Mark the current player turn name as yellow color and text
+  const playerDom = playersDOM.find((player) => player.playerId === playerId);
+
+  playerDom.playerNameElement.style.color = "yellow";
+  if (playerId === indexModule.humanPlayerIndex) {
+    playerDom.playerNameElement.textContent = playerName + "  (Your turn)";
+  } else {
+    playerDom.playerNameElement.textContent = playerName + "  (This PC's turn)";
+  }
+}
+
 export {
   createPlayerArea,
   setCellBackgroundAfterShot,
   markPlayerAsLost,
   markPlayerAsWinner,
   logAttack,
+  setPlayerTurnText,
 };

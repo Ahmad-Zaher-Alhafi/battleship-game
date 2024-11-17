@@ -9,7 +9,7 @@ const players = [];
 const humanPlayerIndex = 0;
 let humanPlayer;
 
-let gameSpeed = 10; // game speed measored by ms
+let gameSpeed = 200; // game speed measored by ms
 
 function getRandomInteger(maxNumber) {
   return Math.floor(Math.random() * maxNumber);
@@ -77,6 +77,11 @@ function generatePlayers(pcsCount) {
 
   currentTurnPlayer = humanPlayer;
   currentPlayerTurnIndex = 0;
+
+  domGeneratorModule.setPlayerTurnText(
+    currentTurnPlayer.id,
+    currentTurnPlayer.name
+  );
 }
 
 document.addEventListener("onPlayerAttacked", onPlayerAttacked);
@@ -147,6 +152,10 @@ function moveTurnToNextPlayer() {
   }
 
   currentTurnPlayer = players[currentPlayerTurnIndex];
+  domGeneratorModule.setPlayerTurnText(
+    currentPlayerTurnIndex,
+    currentTurnPlayer.name
+  );
 }
 
 function getPlayersThatHasNotLost() {
@@ -191,4 +200,8 @@ function startGame(event) {
   generatePlayers(pcsCount);
 }
 
-export { humanPlayerIndex, hasGameFinished, hasPlayerLost };
+function getPlayerName(playerId) {
+  return players[playerId].name;
+}
+
+export { humanPlayerIndex, hasGameFinished, hasPlayerLost, getPlayerName };
