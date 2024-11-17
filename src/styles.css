@@ -46,10 +46,6 @@ body {
   background-color: rgb(83, 83, 83);
 }
 
-.cell:hover {
-  background-color: aqua;
-}
-
 .playerName {
   font-weight: bold;
 }

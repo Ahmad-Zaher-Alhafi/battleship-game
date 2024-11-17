@@ -164,3 +164,5 @@ function checkEndOfGame() {
 
   return false;
 }
+
+export { humanPlayerIndex };

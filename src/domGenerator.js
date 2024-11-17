@@ -1,3 +1,5 @@
+import * as indexModule from "./index";
+
 const playerAreas = document.querySelector(".playerAreas");
 const logsContent = document.querySelector(".logsContent");
 
@@ -33,7 +35,11 @@ function createPlayerArea(
       cell.className = "cell";
       playerBoard.appendChild(cell);
       cells.push(cell);
-      cell.addEventListener("click", onCellClicked);
+      if (playerId !== indexModule.humanPlayerIndex) {
+        cell.addEventListener("click", onCellClicked);
+        cell.addEventListener("mouseenter", onCellEnter);
+        cell.addEventListener("mouseleave", onCellLeave);
+      }
     }
   }
 
@@ -45,18 +51,36 @@ function createPlayerArea(
     }
   }
 
-  playersDOM.push({ playerId, cells, playerNameElement });
+  playersDOM.push({ playerId, cells, playerNameElement, boardCells });
 }
 
 function onCellClicked(event) {
   const clickedCell = event.target;
-  const playerIdWithCells = playersDOM.find((item) =>
-    item.cells.includes(clickedCell)
-  );
-  const playerID = playerIdWithCells.playerId;
-  const clickedCellIndex = playerIdWithCells.cells.indexOf(clickedCell);
+  const playerDOM = playersDOM.find((item) => item.cells.includes(clickedCell));
+  const playerID = playerDOM.playerId;
+  const clickedCellIndex = playerDOM.cells.indexOf(clickedCell);
 
   creteShootCustomEvent(playerID, clickedCellIndex);
+}
+
+function onCellEnter(event) {
+  const enteredCell = event.target;
+  const playerDOM = playersDOM.find((item) => item.cells.includes(enteredCell));
+  const cell = playerDOM.boardCells[playerDOM.cells.indexOf(enteredCell)];
+
+  if (!cell.isShot) {
+    enteredCell.style.backgroundColor = "aqua";
+  }
+}
+
+function onCellLeave(event) {
+  const enteredCell = event.target;
+  const playerDOM = playersDOM.find((item) => item.cells.includes(enteredCell));
+  const cell = playerDOM.boardCells[playerDOM.cells.indexOf(enteredCell)];
+
+  if (!cell.isShot) {
+    enteredCell.style.backgroundColor = "rgb(83, 83, 83)";
+  }
 }
 
 function creteShootCustomEvent(targetPlayerID, targetCellIndex) {
@@ -76,6 +100,7 @@ function setCellBackgroundAfterShot(plaeyrId, cellIndex, cellContainsShipPart) {
   );
 
   const cell = playerIdWithCells.cells[cellIndex];
+  cell.style.backgroundColor = "rgb(83, 83, 83)";
 
   if (cellContainsShipPart) {
     cell.style.backgroundColor = "red";
